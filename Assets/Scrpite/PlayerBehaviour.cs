@@ -3,6 +3,9 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     float CurrentHealth = 100f;
+    int CurrentScore = 0;
+    bool CanInteract = false;
+    CoinBehaviour CurrentCoin = null;
 
     public void ModifyHealth(float amount)
     {
@@ -17,13 +20,38 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision other)
+    void OnInteract()
     {
-        if (other.gameObject.CompareTag("Hit")==true)
+        if (CanInteract && CurrentCoin != null)
         {
-            Debug.Log("Player hit by enemy");
-            other.gameObject.GetComponent<HitBehaviour>().TakeDamage(this); // Assuming HitBehaviour has a TakeDamage method
+            Debug.Log("Interacting with coin");
+            CurrentCoin.Collect(this);
+        }
+    }
+
+    public void ModifyScore(int amount)
+    {
+        CurrentScore += amount;
+        Debug.Log("Current Score: " + CurrentScore);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Coin"))
+        {
+            CanInteract = true;
+            CurrentCoin = other.GetComponent<CoinBehaviour>();
+            Debug.Log("Coin detected");
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Coin"))
+        {
+            CanInteract = false;
+            CurrentCoin = null;
+            Debug.Log("Coin lost");
         }
     }
 }
-
