@@ -39,6 +39,7 @@ namespace KeySystem
                     DoorAnimator.Play(OpenAnimationName, 0, 0f);
                     DoorOpen = true;
                     StartCoroutine(PauseDoorInteraction());
+                    StartCoroutine(AutoCloseDoor()); // Start auto-close coroutine
                 }
                 else if (DoorOpen && !pauseInteraction)
                 {
@@ -50,6 +51,18 @@ namespace KeySystem
             else
             {
                 StartCoroutine(ShowDoorLocked());
+            }
+        }
+
+        // Add this coroutine to auto-close the door after 3 seconds
+        IEnumerator AutoCloseDoor()
+        {
+            yield return new WaitForSeconds(2f);
+            if (DoorOpen && !pauseInteraction)
+            {
+                DoorAnimator.Play(CloseAnimationName, 0, 0f);
+                DoorOpen = false;
+                StartCoroutine(PauseDoorInteraction());
             }
         }
 

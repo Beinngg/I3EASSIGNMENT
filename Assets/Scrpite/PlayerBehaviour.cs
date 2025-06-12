@@ -6,7 +6,7 @@ public class PlayerBehaviour : MonoBehaviour
     int CurrentScore = 0;
     bool CanInteract = false;
     CoinBehaviour CurrentCoin = null;
-
+    BluePill CurrentBluePill = null;
     public void ModifyHealth(float amount)
     {
         CurrentHealth += amount;
@@ -27,6 +27,16 @@ public class PlayerBehaviour : MonoBehaviour
             Debug.Log("Interacting with coin");
             CurrentCoin.Collect(this);
         }
+        else if (CanInteract && CurrentBluePill != null)
+        {
+            Debug.Log("Interacting with blue pill");
+            CurrentBluePill.Collect(this);
+        }
+
+        else
+        {
+            Debug.Log("Nothing to interact with");
+        }
     }
 
     public void ModifyScore(int amount)
@@ -42,6 +52,12 @@ public class PlayerBehaviour : MonoBehaviour
             CanInteract = true;
             CurrentCoin = other.GetComponent<CoinBehaviour>();
             Debug.Log("Coin detected");
+        }
+        if (other.CompareTag("BluePill"))
+        {
+            CanInteract = true;
+            CurrentBluePill = other.GetComponent<BluePill>();
+            Debug.Log("Blue pill detected");
         }
     }
 

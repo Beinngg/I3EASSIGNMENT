@@ -8,6 +8,9 @@ TagManager:
   - Hit
   - Coin
   - red key
+  - Interactable
+  - RedPill
+  - BluePill
   layers:
   - Default
   - TransparentFX
@@ -15,7 +18,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Interact
   - 
   - 
   - 

@@ -19,6 +19,9 @@ namespace KeySystem
         bool DoOnce;
         string InteractableTag = "Interactable";
 
+        private Renderer lastRenderer = null;
+        private Color originalColor;
+
         private void Update()
         {
             RaycastHit hit;
@@ -28,6 +31,22 @@ namespace KeySystem
             {
                 if (hit.collider.CompareTag(InteractableTag))
                 {
+                    // Change color of the interactable
+                    Renderer rend = hit.collider.GetComponent<Renderer>();
+                    if (rend != null)
+                    {
+                        if (lastRenderer != rend)
+                        {
+                            // Reset previous renderer color
+                            if (lastRenderer != null)
+                                lastRenderer.material.color = originalColor;
+
+                            lastRenderer = rend;
+                            originalColor = rend.material.color;
+                            rend.material.color = Color.yellow; // Highlight color
+                        }
+                    }
+
                     if (!DoOnce)
                     {
                         RayCastObject = hit.collider.GetComponent<KeyItemController>();
@@ -40,6 +59,10 @@ namespace KeySystem
                         RayCastObject.ObjectInteraction();
                     }
                 }
+                else
+                {
+                    ResetLastRenderer();
+                }
             }
             else
             {
@@ -48,6 +71,7 @@ namespace KeySystem
                     crosshairChange(false);
                     DoOnce = false;
                 }
+                ResetLastRenderer();
             }
         }
 
@@ -62,6 +86,15 @@ namespace KeySystem
             {
                 crosshair.color = Color.white;
                 IsCrosshairActive = false;
+            }
+        }
+
+        void ResetLastRenderer()
+        {
+            if (lastRenderer != null)
+            {
+                lastRenderer.material.color = originalColor;
+                lastRenderer = null;
             }
         }
     }
