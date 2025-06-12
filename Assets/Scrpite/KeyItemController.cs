@@ -20,5 +20,16 @@ namespace KeySystem
 
         }
         void ObjectInteraction()
+        {
+            if (RedDoor)
+            {
+                doorObject.PlayAnimation();
+            }
+            else if (RedKey)
+            {
+                _keyInventry.HasRedKey = true;
+                ganeObject.SetActive(false);
+            }
+        }
     }
 }
