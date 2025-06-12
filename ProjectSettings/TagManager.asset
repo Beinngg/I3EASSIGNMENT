@@ -7,6 +7,7 @@ TagManager:
   - CinemachineTarget
   - Hit
   - Coin
+  - red key
   layers:
   - Default
   - TransparentFX

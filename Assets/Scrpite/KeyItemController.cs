@@ -19,7 +19,7 @@ namespace KeySystem
 
 
         }
-        void ObjectInteraction()
+         public void ObjectInteraction()
         {
             if (RedDoor)
             {
@@ -28,7 +28,7 @@ namespace KeySystem
             else if (RedKey)
             {
                 _keyInventry.HasRedKey = true;
-                ganeObject.SetActive(false);
+                gameObject.SetActive(false);
             }
         }
     }

@@ -20,10 +20,10 @@ namespace KeySystem
         string InteractiableTag = "Interactable";
         private void Update()
         {
-            RayCastHit hit;
+            RaycastHit hit;
             Vector3 fwd = transform.TransformDirection(Vector3.forward);
             int mask = 1 << LayerMask.NameToLayer(ExucluseLayerName) | layerMastInteract.value;
-            if (Physics.RayCast(transform.position, fwd, out hit, RayLength, mask))
+            if (Physics.Raycast(transform.position, fwd, out hit, RayLength, mask))
             {
                 if (hit.collider.CompareTag(InteractiableTag))
                 {
@@ -33,14 +33,14 @@ namespace KeySystem
                         crosshairChange(true);
                     }
                     IsCrosshairActive = true;
-                    doOnce = true;
-                    if (Input.GetKeyDown(OpenteractKey))
+                    DoOnce = true;
+                    if (Input.GetKeyDown(OpeninteractKey))
                     {
                         RayCastObject.ObjectInteraction();
                     }
                 }
             }
-            else;
+            else
             {
                 if (IsCrosshairActive)
                 {
