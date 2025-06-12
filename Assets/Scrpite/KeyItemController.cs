@@ -10,24 +10,30 @@ namespace KeySystem
         [SerializeField] bool RedKey = false;
         [SerializeField] KeyInventry _keyInventry = null;
         private KeyDoorController doorObject;
+
         void Start()
         {
             if (RedDoor)
             {
                 doorObject = GetComponent<KeyDoorController>();
             }
-
-
         }
-         public void ObjectInteraction()
+
+        public void ObjectInteraction()
         {
             if (RedDoor)
             {
-                doorObject.PlayAnimation();
+                if (doorObject != null)
+                    doorObject.PlayAnimation();
+                else
+                    Debug.LogWarning("KeyDoorController not found on this object.");
             }
             else if (RedKey)
             {
-                _keyInventry.HasRedKey = true;
+                if (_keyInventry != null)
+                    _keyInventry.HasRedKey = true;
+                else
+                    Debug.LogWarning("KeyInventry reference is missing.");
                 gameObject.SetActive(false);
             }
         }

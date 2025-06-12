@@ -10,31 +10,32 @@ namespace KeySystem
         [SerializeField]
         private float RayLength = 5f;
         [SerializeField]
-        private LayerMask layerMastInteract;
-        [SerializeField] string ExucluseLayerName = null;
+        private LayerMask layerMaskInteract;
+        [SerializeField] string ExcludeLayerName = null;
         private KeyItemController RayCastObject;
         [SerializeField] KeyCode InteractKey = KeyCode.E;
-        Image crosshair = null;
+        [SerializeField] Image crosshair = null;
         bool IsCrosshairActive;
         bool DoOnce;
-        string InteractiableTag = "Interactable";
+        string InteractableTag = "Interactable";
+
         private void Update()
         {
             RaycastHit hit;
             Vector3 fwd = transform.TransformDirection(Vector3.forward);
-            int mask = 1 << LayerMask.NameToLayer(ExucluseLayerName) | layerMastInteract.value;
+            int mask = (1 << LayerMask.NameToLayer(ExcludeLayerName)) | layerMaskInteract.value;
             if (Physics.Raycast(transform.position, fwd, out hit, RayLength, mask))
             {
-                if (hit.collider.CompareTag(InteractiableTag))
+                if (hit.collider.CompareTag(InteractableTag))
                 {
                     if (!DoOnce)
                     {
-                        RayCastObject = hit.collider.GetComponeent<KeyItemController>();
+                        RayCastObject = hit.collider.GetComponent<KeyItemController>();
                         crosshairChange(true);
                     }
                     IsCrosshairActive = true;
                     DoOnce = true;
-                    if (Input.GetKeyDown(OpeninteractKey))
+                    if (Input.GetKeyDown(InteractKey))
                     {
                         RayCastObject.ObjectInteraction();
                     }
@@ -49,8 +50,10 @@ namespace KeySystem
                 }
             }
         }
+
         void crosshairChange(bool on)
         {
+            if (crosshair == null) return;
             if (on && !DoOnce)
             {
                 crosshair.color = Color.red;
@@ -61,8 +64,5 @@ namespace KeySystem
                 IsCrosshairActive = false;
             }
         }
-
-        
-
     }
 }
