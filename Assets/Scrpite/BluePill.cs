@@ -11,7 +11,7 @@ public class BluePill : MonoBehaviour
         // Apply damage to the player
         player.ModifyHealth(-damage);
 
-        Destroy(gameObject&&gameObject.tag=="RedPill"); // Destroy the blue pill object
-// Destroy the blue pill object
+        Destroy(gameObject); // Destroy the blue pill object
+// Destroy the blue pill bject
     }
 }

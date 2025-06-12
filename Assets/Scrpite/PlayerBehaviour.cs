@@ -7,6 +7,7 @@ public class PlayerBehaviour : MonoBehaviour
     bool CanInteract = false;
     CoinBehaviour CurrentCoin = null;
     BluePill CurrentBluePill = null;
+    RedPill CurrentRedpill = null;
     public void ModifyHealth(float amount)
     {
         CurrentHealth += amount;
@@ -32,6 +33,11 @@ public class PlayerBehaviour : MonoBehaviour
             Debug.Log("Interacting with blue pill");
             CurrentBluePill.Collect(this);
         }
+        else if (CanInteract && CurrentRedpill != null)
+        {
+            Debug.Log("Interacting with red pill");
+            CurrentRedpill.Collect(this);
+        }
 
         else
         {
@@ -53,11 +59,17 @@ public class PlayerBehaviour : MonoBehaviour
             CurrentCoin = other.GetComponent<CoinBehaviour>();
             Debug.Log("Coin detected");
         }
-        if (other.CompareTag("BluePill"))
+        else if (other.CompareTag("BluePill"))
         {
             CanInteract = true;
             CurrentBluePill = other.GetComponent<BluePill>();
             Debug.Log("Blue pill detected");
+        }
+        else if(other.CompareTag("RedPill"))
+        {
+            CanInteract = true;
+            CurrentRedpill = other.GetComponent<RedPill>();
+            Debug.Log("Red pill detected");
         }
     }
 
@@ -68,6 +80,18 @@ public class PlayerBehaviour : MonoBehaviour
             CanInteract = false;
             CurrentCoin = null;
             Debug.Log("Coin lost");
+        }
+        else if (other.CompareTag("BluePill"))
+        {
+            CanInteract = false;
+            CurrentBluePill = null;
+            Debug.Log("Blue pill lost");
+        }
+        else if (other.CompareTag("RedPill"))
+        {
+            CanInteract = false;
+            CurrentRedpill = null;
+            Debug.Log("Red pill lost");
         }
     }
 }
