@@ -5,6 +5,6 @@ namespace KeySystem
 {
     public class KeyInventry : MonoBehaviour
     {
-       
+       public bool HasRedKey= false;
     }
 }
