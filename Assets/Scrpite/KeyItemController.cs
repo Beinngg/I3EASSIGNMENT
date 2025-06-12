@@ -6,6 +6,19 @@ namespace KeySystem
 {
     public class KeyItemController : MonoBehaviour
     {
-        [SerializeField] bool RedDoor = null;
-        [SerializeField] bool RedKey = null;
+        [SerializeField] bool RedDoor = false;
+        [SerializeField] bool RedKey = false;
+        [SerializeField] KeyInventry _keyInventry = null;
+        private KeyDoorController doorObject;
+        void Start()
+        {
+            if (RedDoor)
+            {
+                doorObject = GetComponent<KeyDoorController>();
+            }
+
+
+        }
+        void ObjectInteraction()
+    }
 }

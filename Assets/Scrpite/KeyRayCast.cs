@@ -8,9 +8,9 @@ namespace KeySystem
     {
         [SerializeField]
         private float RayLength = 5f;
-        [serializeField]
+        [SerializeField]
         private LayerMask layerMastInteract;
-        [serializeField] string ExucluseLayerName = null;
+        [SerializeField] string ExucluseLayerName = null;
          //private KeyItemController RayCastObject;
     }
         
