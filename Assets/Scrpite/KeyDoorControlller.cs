@@ -34,19 +34,32 @@ namespace KeySystem
         {
             if (_keyInventry.HasRedKey)
             {
-                if (!DoorOpen && !pauseInteraction)
-                {
-                    DoorAnimator.Play(OpenAnimationName, 0, 0f);
-                    DoorOpen = true;
-                    StartCoroutine(PauseDoorInteraction());
-                    StartCoroutine(AutoCloseDoor()); // Start auto-close coroutine
-                }
-                else if (DoorOpen && !pauseInteraction)
-                {
-                    DoorAnimator.Play(CloseAnimationName, 0, 0f);
-                    DoorOpen = false;
-                    StartCoroutine(PauseDoorInteraction());
-                }
+                OpenDoor();
+
+            }
+            else if (_keyInventry.HasBlueKey)
+            {
+                OpenDoor();
+            }
+            else if (_keyInventry.HasGreenKey)
+            {
+                OpenDoor();
+            }
+            else if (_keyInventry.HasYellowKey)
+            {
+                OpenDoor();
+            }
+            else if (_keyInventry.HasPurpleKey)
+            {
+                OpenDoor();
+            }
+            else if (_keyInventry.HasOrangeKey)
+            {
+                OpenDoor();
+            }
+            else if (_keyInventry.HasWhiteKey)
+            {
+                OpenDoor();
             }
             else
             {
@@ -73,6 +86,16 @@ namespace KeySystem
             yield return new WaitForSeconds(TimeToShowUI);
             if (ShowDoorLockedUI != null)
                 ShowDoorLockedUI.SetActive(false);
+        }
+        void OpenDoor()
+        {
+            if (!DoorOpen && !pauseInteraction)
+            {
+                DoorAnimator.Play(OpenAnimationName, 0, 0f);
+                DoorOpen = true;
+                StartCoroutine(AutoCloseDoor());
+                StartCoroutine(PauseDoorInteraction());
+            }
         }
     }
 }

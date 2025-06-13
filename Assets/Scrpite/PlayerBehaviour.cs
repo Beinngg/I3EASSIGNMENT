@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using System.Collections.Generic;
+using System.Collections;
 public class PlayerBehaviour : MonoBehaviour
 {
     float CurrentHealth = 100f;
@@ -20,7 +22,6 @@ public class PlayerBehaviour : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(playerSpawnPoint.position, playerSpawnPoint.forward, out hit, RayLength))
         {
-            Debug.Log("Raycast hit: " + hit.collider.name + " Tag: " + hit.collider.tag);
 
             // Only highlight if the tag matches a collectable
             if (hit.collider.CompareTag("Coin") || hit.collider.CompareTag("BluePill") || hit.collider.CompareTag("RedPill"))
@@ -94,6 +95,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (CurrentHealth <= 0)
         {
             Debug.Log("Player is dead");
+
         }
         else
         {
