@@ -5,6 +5,8 @@ public class CoinBehaviour : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField]
     int coinValue = 1;
+    private Renderer rend;
+    private Color originalColor;
     public void Collect(PlayerBehaviour player)
     {
         // Logic for collecting the coin
@@ -14,5 +16,21 @@ public class CoinBehaviour : MonoBehaviour
         player.ModifyScore(coinValue);
 
         Destroy(gameObject); // Destroy the coin object
+    }
+    public void Highlight()
+    {
+        if (rend != null)
+        {
+            rend.material.color = Color.yellow;
+        } }
+
+
+
+    public void Unhighlight()
+    {
+        if (rend != null)
+        {
+            rend.material.color = originalColor;
+        }
     }
 }

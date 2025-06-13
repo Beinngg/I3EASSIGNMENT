@@ -3,11 +3,91 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     float CurrentHealth = 100f;
+    float RayLength = 5f;
     int CurrentScore = 0;
     bool CanInteract = false;
     CoinBehaviour CurrentCoin = null;
     BluePill CurrentBluePill = null;
-    RedPill CurrentRedpill = null;
+    RedPill CurrentRedPill = null;
+    [SerializeField] Transform playerSpawnPoint;
+
+    // Add these fields
+    private Renderer lastRenderer = null;
+    private Color originalColor;
+
+    void Update()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(playerSpawnPoint.position, playerSpawnPoint.forward, out hit, RayLength))
+        {
+            Debug.Log("Raycast hit: " + hit.collider.name + " Tag: " + hit.collider.tag);
+
+            // Only highlight if the tag matches a collectable
+            if (hit.collider.CompareTag("Coin") || hit.collider.CompareTag("BluePill") || hit.collider.CompareTag("RedPill"))
+            {
+                Renderer rend = hit.collider.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    if (lastRenderer != rend)
+                    {
+                        if (lastRenderer != null)
+                            lastRenderer.material.color = originalColor;
+
+                        lastRenderer = rend;
+                        originalColor = rend.material.color;
+                        rend.material.color = Color.yellow; // Highlight color
+                    }
+                }
+            }
+            else if (lastRenderer != null)
+            {
+                lastRenderer.material.color = originalColor;
+                lastRenderer = null;
+            }
+
+            // Set interactable references as before
+            if (hit.collider.CompareTag("Coin"))
+            {
+                CanInteract = true;
+                CurrentCoin = hit.collider.GetComponent<CoinBehaviour>();
+                CurrentBluePill = null;
+                CurrentRedPill = null;
+            }
+            else if (hit.collider.CompareTag("BluePill"))
+            {
+                CanInteract = true;
+                CurrentBluePill = hit.collider.GetComponent<BluePill>();
+                CurrentCoin = null;
+                CurrentRedPill = null;
+            }
+            else if (hit.collider.CompareTag("RedPill"))
+            {
+                CanInteract = true;
+                CurrentRedPill = hit.collider.GetComponent<RedPill>();
+                CurrentCoin = null;
+                CurrentBluePill = null;
+            }
+            else
+            {
+                CanInteract = false;
+                CurrentCoin = null;
+                CurrentBluePill = null;
+                CurrentRedPill = null;
+            }
+        }
+        else
+        {
+            if (lastRenderer != null)
+            {
+                lastRenderer.material.color = originalColor;
+                lastRenderer = null;
+            }
+            CanInteract = false;
+            CurrentCoin = null;
+            CurrentBluePill = null;
+            CurrentRedPill = null;
+        }
+    }
     public void ModifyHealth(float amount)
     {
         CurrentHealth += amount;
@@ -33,15 +113,10 @@ public class PlayerBehaviour : MonoBehaviour
             Debug.Log("Interacting with blue pill");
             CurrentBluePill.Collect(this);
         }
-        else if (CanInteract && CurrentRedpill != null)
+        else if (CanInteract && CurrentRedPill != null)
         {
             Debug.Log("Interacting with red pill");
-            CurrentRedpill.Collect(this);
-        }
-
-        else
-        {
-            Debug.Log("Nothing to interact with");
+            CurrentRedPill.Collect(this);
         }
     }
 
@@ -65,10 +140,10 @@ public class PlayerBehaviour : MonoBehaviour
             CurrentBluePill = other.GetComponent<BluePill>();
             Debug.Log("Blue pill detected");
         }
-        else if(other.CompareTag("RedPill"))
+        else if (other.CompareTag("RedPill"))
         {
             CanInteract = true;
-            CurrentRedpill = other.GetComponent<RedPill>();
+            CurrentRedPill = other.GetComponent<RedPill>();
             Debug.Log("Red pill detected");
         }
     }
@@ -90,8 +165,14 @@ public class PlayerBehaviour : MonoBehaviour
         else if (other.CompareTag("RedPill"))
         {
             CanInteract = false;
-            CurrentRedpill = null;
+            CurrentRedPill = null;
             Debug.Log("Red pill lost");
         }
     }
+    void SpawnPoint()
+    {
+        gameObject.transform.position = playerSpawnPoint.position;
+        Physics.SyncTransforms();
+    }
+
 }

@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.UI;
 
 namespace KeySystem
 {
@@ -14,7 +13,7 @@ namespace KeySystem
         [SerializeField] string ExcludeLayerName = null;
         private KeyItemController RayCastObject;
         [SerializeField] KeyCode InteractKey = KeyCode.E;
-        [SerializeField] Image crosshair = null;
+
         bool IsCrosshairActive;
         bool DoOnce;
         string InteractableTag = "Interactable";
@@ -31,26 +30,23 @@ namespace KeySystem
             {
                 if (hit.collider.CompareTag(InteractableTag))
                 {
-                    // Change color of the interactable
                     Renderer rend = hit.collider.GetComponent<Renderer>();
                     if (rend != null)
                     {
                         if (lastRenderer != rend)
                         {
-                            // Reset previous renderer color
                             if (lastRenderer != null)
                                 lastRenderer.material.color = originalColor;
 
                             lastRenderer = rend;
                             originalColor = rend.material.color;
-                            rend.material.color = Color.yellow; // Highlight color
+                            rend.material.color = Color.yellow;
                         }
                     }
 
                     if (!DoOnce)
                     {
                         RayCastObject = hit.collider.GetComponent<KeyItemController>();
-                        crosshairChange(true);
                     }
                     IsCrosshairActive = true;
                     DoOnce = true;
@@ -68,24 +64,9 @@ namespace KeySystem
             {
                 if (IsCrosshairActive)
                 {
-                    crosshairChange(false);
                     DoOnce = false;
                 }
                 ResetLastRenderer();
-            }
-        }
-
-        void crosshairChange(bool on)
-        {
-            if (crosshair == null) return;
-            if (on && !DoOnce)
-            {
-                crosshair.color = Color.red;
-            }
-            else
-            {
-                crosshair.color = Color.white;
-                IsCrosshairActive = false;
             }
         }
 
@@ -97,5 +78,6 @@ namespace KeySystem
                 lastRenderer = null;
             }
         }
+        
     }
 }
