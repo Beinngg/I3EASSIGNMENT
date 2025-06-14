@@ -11,6 +11,12 @@ TagManager:
   - Interactable
   - RedPill
   - BluePill
+  - Lava
+  - Dropper
+  - Trigger
+  - BigWall
+  - spike
+  - Spike
   layers:
   - Default
   - TransparentFX

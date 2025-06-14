@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class HitBehaviour : MonoBehaviour
+public class Lava : MonoBehaviour
 {
-    float damage = 5f;
+    float damage = 50f;
 
     public void TakeDamage(PlayerBehaviour player)
     {
@@ -17,11 +17,15 @@ public class HitBehaviour : MonoBehaviour
     if (other.gameObject.CompareTag("Player"))
     {
         PlayerBehaviour player = other.gameObject.GetComponent<PlayerBehaviour>();
-        if (player != null)// Check if PlayerBehaviour is found on the collided object
+        if (player == null)
+        {
+            // Try to get from parent if not found on this object
+            player = other.gameObject.GetComponentInParent<PlayerBehaviour>();
+        }
+        if (player != null)
         {
             player.ModifyHealth(-damage * Time.deltaTime);
         }
-
         else
         {
             Debug.LogWarning("PlayerBehaviour not found on collided object!");
