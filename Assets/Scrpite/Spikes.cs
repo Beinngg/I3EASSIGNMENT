@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Spikes : MonoBehaviour
 {
-    float damage = 40f;
+    int damage = 40;
 
     public void TakeDamage(PlayerBehaviour player)
     {

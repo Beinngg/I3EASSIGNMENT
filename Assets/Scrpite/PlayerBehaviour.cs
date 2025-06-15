@@ -1,7 +1,9 @@
 using UnityEngine;
-
+using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using StarterAssets;
+
 public class PlayerBehaviour : MonoBehaviour
 {
     float CurrentHealth = 100f;
@@ -11,7 +13,14 @@ public class PlayerBehaviour : MonoBehaviour
     CoinBehaviour CurrentCoin = null;
     BluePill CurrentBluePill = null;
     RedPill CurrentRedPill = null;
+    Treasure CurrentTreasure = null;
+    [SerializeField] TMP_Text scoreText;
+    [SerializeField] TMP_Text healthText;
     [SerializeField] Transform playerSpawnPoint;
+    [SerializeField] GameObject Lose;
+    [SerializeField] GameObject Win;
+
+
 
     // Add these fields
     private Renderer lastRenderer = null;
@@ -24,7 +33,26 @@ public class PlayerBehaviour : MonoBehaviour
         {
 
             // Only highlight if the tag matches a collectable
-            if (hit.collider.CompareTag("Coin") || hit.collider.CompareTag("BluePill") || hit.collider.CompareTag("RedPill"))
+            if (hit.collider.CompareTag("Coin") || hit.collider.CompareTag("BluePill") || hit.collider.CompareTag("RedPill") || hit.collider.CompareTag("Treasure"))
+            {
+                // Highlight the object
+                if (lastRenderer != null && lastRenderer != hit.collider.GetComponent<Renderer>())
+                {
+                    lastRenderer.material.color = originalColor; // Reset previous object's color
+                }
+
+                Renderer rend = hit.collider.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    if (lastRenderer != rend)
+                    {
+                        lastRenderer = rend;
+                        originalColor = rend.material.color;
+                        rend.material.color = Color.yellow; // Highlight color
+                    }
+                }
+            }
+            else if (lastRenderer != null)
             {
                 Renderer rend = hit.collider.GetComponent<Renderer>();
                 if (rend != null)
@@ -68,6 +96,14 @@ public class PlayerBehaviour : MonoBehaviour
                 CurrentCoin = null;
                 CurrentBluePill = null;
             }
+            else if (hit.collider.CompareTag("Treasure"))
+            {
+                CanInteract = true;
+                CurrentTreasure = hit.collider.GetComponent<Treasure>();
+                CurrentCoin = null;
+                CurrentBluePill = null;
+                CurrentRedPill = null;
+            }
             else
             {
                 CanInteract = false;
@@ -94,12 +130,16 @@ public class PlayerBehaviour : MonoBehaviour
         CurrentHealth += amount;
         if (CurrentHealth <= 0)
         {
+            CurrentHealth = 0;
+            healthText.text = CurrentHealth.ToString();
             Debug.Log("Player is dead");
+            Lose.SetActive(true);
+
 
         }
         else
         {
-            Debug.Log("Player is alive " + CurrentHealth);
+            healthText.text = CurrentHealth.ToString();
         }
     }
 
@@ -120,12 +160,23 @@ public class PlayerBehaviour : MonoBehaviour
             Debug.Log("Interacting with red pill");
             CurrentRedPill.Collect(this);
         }
+        else if (CanInteract && CurrentTreasure != null)
+        {
+            Debug.Log("Interacting with treasure");
+            CurrentTreasure.Collect(this);
+            Win.SetActive(true);
+
+        }
+        else
+        {
+            Debug.Log("No interactable object in range");
+        }
     }
 
     public void ModifyScore(int amount)
     {
         CurrentScore += amount;
-        Debug.Log("Current Score: " + CurrentScore);
+        scoreText.text = CurrentScore.ToString();
     }
 
     void OnTriggerEnter(Collider other)
@@ -148,6 +199,13 @@ public class PlayerBehaviour : MonoBehaviour
             CurrentRedPill = other.GetComponent<RedPill>();
             Debug.Log("Red pill detected");
         }
+        else if (other.CompareTag("Treasure"))
+        {
+            CanInteract = true;
+            CurrentTreasure = other.GetComponent<Treasure>();
+            Debug.Log("Treasure detected");
+            // Optionally, you can add logic to handle what happens when the treasure is found
+        }
     }
 
     void OnTriggerExit(Collider other)
@@ -169,6 +227,13 @@ public class PlayerBehaviour : MonoBehaviour
             CanInteract = false;
             CurrentRedPill = null;
             Debug.Log("Red pill lost");
+
+        }
+        else if (other.CompareTag("Treasure"))
+        {
+            CanInteract = false;
+            CurrentTreasure = null;
+            // Optionally, you can add logic to handle what happens when the treasure is found
         }
     }
     void SpawnPoint()

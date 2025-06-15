@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Lava : MonoBehaviour
 {
-    float damage = 50f;
+    int damage = 50;
 
     public void TakeDamage(PlayerBehaviour player)
     {

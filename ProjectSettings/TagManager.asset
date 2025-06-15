@@ -17,6 +17,10 @@ TagManager:
   - BigWall
   - spike
   - Spike
+  - Rotate
+  - Hammer
+  - tREASURE
+  - Treasure
   layers:
   - Default
   - TransparentFX

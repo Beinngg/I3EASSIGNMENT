@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HitBehaviour : MonoBehaviour
 {
-    float damage = 5f;
+    [SerializeField]int damage = 2;
 
     public void TakeDamage(PlayerBehaviour player)
     {
@@ -17,15 +17,16 @@ public class HitBehaviour : MonoBehaviour
     if (other.gameObject.CompareTag("Player"))
     {
         PlayerBehaviour player = other.gameObject.GetComponent<PlayerBehaviour>();
-        if (player != null)// Check if PlayerBehaviour is found on the collided object
-        {
-            player.ModifyHealth(-damage * Time.deltaTime);
+            if (player != null)// Check if PlayerBehaviour is found on the collided object
+            {
+                player.ModifyHealth(-damage * Time.deltaTime);
+                Debug.Log("Player is taking damage: " + damage * Time.deltaTime);
         }
 
-        else
-        {
-            Debug.LogWarning("PlayerBehaviour not found on collided object!");
-        }
+            else
+            {
+                Debug.LogWarning("PlayerBehaviour not found on collided object!");
+            }
     }
 }
 }
