@@ -1,3 +1,8 @@
+/*
+* Author: LiuBingxun
+* Date: 14/6/2025
+* Description: MATCH KEYS AND DOORS, OPEN DOORS OR ADD KEYS TO INVENTORY
+*/
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
@@ -6,6 +11,7 @@ namespace KeySystem
 {
     public class KeyItemController : MonoBehaviour
     {
+        // Booleans to identify which type of key or door this object is
         [SerializeField] bool RedDoor = false;
         [SerializeField] bool RedKey = false;
         [SerializeField] bool BlueDoor = false;
@@ -20,11 +26,12 @@ namespace KeySystem
         [SerializeField] bool OrangeKey = false;
         [SerializeField] bool WhiteDoor = false;
         [SerializeField] bool WhiteKey = false;
-        [SerializeField] KeyInventry _keyInventry = null;
-        private KeyDoorController doorObject;
+        [SerializeField] KeyInventry _keyInventry = null; // Reference to the player's key inventory
+        private KeyDoorController doorObject; // Reference to the door controller script
 
         void Start()
         {
+            // If this object is a door, get the KeyDoorController component
             if (RedDoor || BlueDoor || GreenDoor || YellowDoor || PurpleDoor || OrangeDoor || WhiteDoor)
             {
                 doorObject = GetComponent<KeyDoorController>();
@@ -53,7 +60,7 @@ namespace KeySystem
             else if (RedKey)
             {
                 _keyInventry.HasRedKey = true;
-                gameObject.SetActive(false);
+                gameObject.SetActive(false); // Hide the key after collection
             }
             else if (BlueKey)
             {

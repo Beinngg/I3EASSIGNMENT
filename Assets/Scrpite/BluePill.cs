@@ -1,3 +1,8 @@
+/*
+* Author: LiuBingxun
+* Date: 14/6/2025
+* Description: COLLECT BLUE PILL AND APPLY DAMAGE TO PLAYER
+*/
 using UnityEngine;
 
 public class BluePill : MonoBehaviour

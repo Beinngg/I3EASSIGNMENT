@@ -1,3 +1,8 @@
+/*
+* Author: LiuBingxun
+* Date: 14/6/2025
+* Description:DROP AND DEAL DAMAGE IN A ROOM
+*/
 using UnityEngine;
 
 public class Dropper : MonoBehaviour

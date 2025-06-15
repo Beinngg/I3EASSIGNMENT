@@ -1,3 +1,8 @@
+/*
+* Author: LiuBingxun
+* Date: 14/6/2025
+* Description: PICK POINTS AND ADD SCORE TO PLAYER
+*/
 using UnityEngine;
 
 public class CoinBehaviour : MonoBehaviour

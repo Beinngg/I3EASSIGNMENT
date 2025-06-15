@@ -1,31 +1,27 @@
 using UnityEngine;
-using System.Collections.Generic;
 using System.Collections;
 
 namespace KeySystem
 {
     public class KeyRayCast : MonoBehaviour
     {
-        [SerializeField]
-        private float RayLength = 5f;
-        [SerializeField]
-        private LayerMask layerMaskInteract;
-        [SerializeField] string ExcludeLayerName = null;
-        private KeyItemController RayCastObject;
-        [SerializeField] KeyCode InteractKey = KeyCode.E;
+        [SerializeField] private float RayLength = 5f; // Raycast distance
+        [SerializeField] private LayerMask layerMaskInteract; // Layers to include in the raycast
+        [SerializeField] string ExcludeLayerName = null; // Layer to exclude from raycast
+        private KeyItemController RayCastObject; // Reference to the interactable object hit by raycast
+        [SerializeField] KeyCode InteractKey = KeyCode.E; // Key to interact
 
-        bool IsCrosshairActive;
-        bool DoOnce;
-        string InteractableTag = "Interactable";
+        string InteractableTag = "Interactable"; // Tag for interactable objects
 
-        private Renderer lastRenderer = null;
-        private Color originalColor;
+        private Renderer lastRenderer = null; // Last highlighted object's renderer
+        private Color originalColor; // Original color of last highlighted object
 
         private void Update()
         {
             RaycastHit hit;
             Vector3 fwd = transform.TransformDirection(Vector3.forward);
-            int mask = (1 << LayerMask.NameToLayer(ExcludeLayerName)) | layerMaskInteract.value;
+            int mask = (1 << LayerMask.NameToLayer(ExcludeLayerName)) | layerMaskInteract.value; // Combine masks
+
             if (Physics.Raycast(transform.position, fwd, out hit, RayLength, mask))
             {
                 if (hit.collider.CompareTag(InteractableTag))
@@ -36,37 +32,29 @@ namespace KeySystem
                         if (lastRenderer != rend)
                         {
                             if (lastRenderer != null)
-                                lastRenderer.material.color = originalColor;
+                                lastRenderer.material.color = originalColor; // Reset previous color
 
                             lastRenderer = rend;
                             originalColor = rend.material.color;
-                            rend.material.color = Color.yellow;
+                            rend.material.color = Color.yellow; // Highlight color
                         }
                     }
 
-                    if (!DoOnce)
+                    RayCastObject = hit.collider.GetComponent<KeyItemController>(); // Always update reference
+
+                    if (Input.GetKeyDown(InteractKey) && RayCastObject != null)
                     {
-                        RayCastObject = hit.collider.GetComponent<KeyItemController>();
-                    }
-                    IsCrosshairActive = true;
-                    DoOnce = true;
-                    if (Input.GetKeyDown(InteractKey))
-                    {
-                        RayCastObject.ObjectInteraction();
+                        RayCastObject.ObjectInteraction(); // Interact with the object
                     }
                 }
                 else
                 {
-                    ResetLastRenderer();
+                    ResetLastRenderer(); // Reset highlight if not interactable
                 }
             }
             else
             {
-                if (IsCrosshairActive)
-                {
-                    DoOnce = false;
-                }
-                ResetLastRenderer();
+                ResetLastRenderer(); // Reset highlight if nothing hit
             }
         }
 
@@ -74,10 +62,9 @@ namespace KeySystem
         {
             if (lastRenderer != null)
             {
-                lastRenderer.material.color = originalColor;
+                lastRenderer.material.color = originalColor; // Restore original color
                 lastRenderer = null;
             }
         }
-        
     }
 }
